@@ -1,0 +1,106 @@
+import React, { useState } from "react";
+
+
+// Single-file React component (default export)
+// Tailwind CSS classes are used for styling (no imports required here)
+// Uses shadcn/ui + lucide-react components in example import lines
+// Note: In a real project make sure those packages are installed. This file is written
+// to be copy-pasted into a React app that already supports Tailwind.
+
+
+import { Card, CardContent, CardHeader } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
+import { Plus, Check, Edit, Trash2 } from "lucide-react";
+
+
+export default function WomenInRecoveryPortal() {
+const [view, setView] = useState("home");
+
+
+// Sample seed data
+const [affirmations, setAffirmations] = useState([
+{ id: 1, text: "I am worthy of care and healing." },
+{ id: 2, text: "Small steps add up to big changes." },
+]);
+
+
+const [goals, setGoals] = useState([
+{ id: 1, title: "Attend 3 support meetings this week", done: false },
+{ id: 2, title: "Practice 10 minutes of mindful breathing daily", done: true },
+]);
+
+
+const [stories, setStories] = useState([
+{
+id: 1,
+author: "A.",
+title: "One Day at a Time",
+text: "I rebuilt trust with myself by showing up to treatment and asking for help.",
+},
+]);
+
+
+const [reflections, setReflections] = useState([
+{ id: 1, date: "2025-11-01", text: "Felt proud after attending group." },
+]);
+
+
+// form state
+const [newAffirmation, setNewAffirmation] = useState("");
+const [newGoal, setNewGoal] = useState("");
+const [newStory, setNewStory] = useState({ title: "", author: "", text: "" });
+const [newReflection, setNewReflection] = useState("");
+
+
+// helpers
+const addAffirmation = () => {
+if (!newAffirmation.trim()) return;
+setAffirmations((s) => [
+...s,
+{ id: Date.now(), text: newAffirmation.trim() },
+]);
+setNewAffirmation("");
+};
+
+
+const addGoal = () => {
+if (!newGoal.trim()) return;
+setGoals((s) => [...s, { id: Date.now(), title: newGoal.trim(), done: false }]);
+setNewGoal("");
+};
+
+
+const toggleGoal = (id) => {
+setGoals((s) => s.map((g) => (g.id === id ? { ...g, done: !g.done } : g)));
+};
+
+
+const removeGoal = (id) => setGoals((s) => s.filter((g) => g.id !== id));
+
+
+const addStory = () => {
+if (!newStory.title.trim() || !newStory.text.trim()) return;
+setStories((s) => [...s, { ...newStory, id: Date.now() }]);
+setNewStory({ title: "", author: "", text: "" });
+};
+
+
+const addReflection = () => {
+if (!newReflection.trim()) return;
+setReflections((s) => [
+...s,
+{ id: Date.now(), date: new Date().toISOString().slice(0, 10), text: newReflection.trim() },
+]);
+setNewReflection("");
+};
+
+
+// small presentational components inside the file
+const Nav = () => (
+<nav className="flex gap-2 items-center">
+<button
+className={`px-3 py-1 rounded ${view === "home" ? "bg-indigo-600 text-white" : "bg-white/50"}`}
+onClick={() => setView("home")}
+>
